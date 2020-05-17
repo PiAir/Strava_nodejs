@@ -1,0 +1,1 @@
+sudo docker run -d --name node-strava -e "PORT=3000" -p 8081:3000 -u node docker-strava:latest 

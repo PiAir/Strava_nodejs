@@ -1,0 +1,6 @@
+cache/StravaCache
+node_modules
+develop
+yarn.lock
+*.log
+*.sh
