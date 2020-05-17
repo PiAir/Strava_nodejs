@@ -23,4 +23,5 @@ In .env you can set the activities you want to ignore (add the Strava activity I
 
 ## Clear cache
 If you want to force the clearing of the cache, go to /cache/refresh/6tuyfh456
+
 The '6tuyfh456' part of the url is set in .env and can (should) be changed to something you only know.
