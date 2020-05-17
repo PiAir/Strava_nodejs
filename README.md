@@ -25,3 +25,27 @@ In .env you can set the activities you want to ignore (add the Strava activity I
 If you want to force the clearing of the cache, go to /cache/refresh/6tuyfh456
 
 The '6tuyfh456' part of the url is set in .env and can (should) be changed to something you only know.
+
+## Docker
+To use the development setup, you need to install Docker and then run the run-docker.sh file.
+After that you'll be logged into the container and need to do some more things to install everything the first time:
+```
+yarn init -y
+yarn add express
+yarn add -D nodemon
+yarn add flat-cache --ignore-engines
+yarn add dotenv --ignore-engines
+yarn add node-fetch --ignore-engines
+```
+with
+```
+yarn start
+```
+you can then start the server and reach it on port 8080 (not 3000!)
+This server stops working if you close the command window.
+
+The run-node-strava.sh is meant to be used with a production version. First you have to build the image using
+```
+sudo docker build -t docker-strava .
+```
+Then you can use run-node-strava.sh to start a server in the background. It will run on port 8081 by default.
