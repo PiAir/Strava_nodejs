@@ -1,13 +1,13 @@
 # Strava_nodejs
  Simple Strava API + Javascript + Node.js + Docker solution
  
- The code is based on [the Javascript only version](https://github.com/fpolignano/Code_From_Tutorials/tree/master/Strava_Api/LeafletUpdates) version by [Fran Polignano](https://github.com/fpolignano).
+The code is based on [the Javascript only version](https://github.com/fpolignano/Code_From_Tutorials/tree/master/Strava_Api/LeafletUpdates) version by [Fran Polignano](https://github.com/fpolignano).
  His [YouTube tutorials](https://www.youtube.com/watch?v=sgscChKfGyg&list=PLO6KswO64zVvcRyk0G0MAzh5oKMLb6rTW) and code on Github were very helpful for me to get started with the Strava API.
  
- His code had a few problems though, so I tried to fix them. One major problem for me was the fact that the Strava credentials were visible in the JavaScript code, meaning anyone could gain access to your account that way. The only way that I found to fix that was by splitting the application up into two parts: a server part (build using Node.js) and a client-part (using Javascript). Using Node.js had the added benifit that I could re-use much of the code. It also allowed for 'local' (on the server) caching, which is needed due to the limits that Strava has put on the number of API call that you can make during a given timeperiod.
+His code had a few problems though, so I tried to fix them. One major problem for me was the fact that the Strava credentials were visible in the JavaScript code, meaning anyone could gain access to your account that way. The only way that I found to fix that was by splitting the application up into two parts: a server part (build using Node.js) and a client-part (using Javascript). Using Node.js had the added benifit that I could re-use much of the code. It also allowed for 'local' (on the server) caching, which is needed due to the limits that Strava has put on the number of API call that you can make during a given timeperiod.
  
- Because I did not want to install Node.js on my local system, I used Docker as a way to easily deploy it for the development setting and (based on the same code, just with a different way of building the Docker container) for production purposes.
- Documentation is still lacking, but the code is here.
+Because I did not want to install Node.js on my local system, I used Docker as a way to easily deploy it for the development setting and (based on the same code, just with a different way of building the Docker container) for production purposes.
+Documentation is still lacking, but the code is here.
  
  ## .env
  All configuration is done via the .env file. Make sure you replace 
@@ -20,6 +20,9 @@ with the appropriate values.
 
 You can also set the amount of minutes that the data is being cached through the 'expire' value. It is set to 60 (1 hour) by default, but even bigger values are usually good.
 In .env you can set the activities you want to ignore (add the Strava activity ID) and the types of activities (can be multiple) that you want to display.
+Changes to .env will only be read by node.js when the server restarts.
+
+You can set the 'activity_since' variable to indicate how far back the script needs to go. Paging has been implemented, so it is possible to go back more than the current 60 per page activities (Strava limits the number per page to 200).
 
 ## Clear cache
 If you want to force the clearing of the cache, go to /cache/refresh/6tuyfh456
