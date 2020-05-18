@@ -9,6 +9,7 @@ const expire = process.env.expire
 const force_refresh = process.env.force_refresh
 const cache = new Cache('StravaCache', path.resolve('./cache'), expire);
 const fetch = require('node-fetch');
+const activity_since = process.env.activity_since
 
 const PORT = process.env.PORT || 8080;
 
@@ -35,8 +36,9 @@ app.get("/oauth/token", (nreq, nres) => {
       .then(json => nres.json({access_token : json.access_token}))
 });
 
-app.get("/athlete/activities", (nreq, nres) => {
+app.get("/athlete/activities/:page", (nreq, nres) => {
 
+    var page_id = nreq.params.page
     var key =  '__express__' + nreq.originalUrl || nreq.url
     console.log(key);
     const cacheContent = cache.getKey(key);
@@ -49,7 +51,7 @@ app.get("/athlete/activities", (nreq, nres) => {
                     .then(res => res.json())
                     .then(function (json){
                             // console.log(json);
-                            const activities_link = `https://www.strava.com/api/v3/athlete/activities?per_page=60&access_token=${json.access_token}`    
+                            const activities_link = `https://www.strava.com/api/v3/athlete/activities?per_page=60&access_token=${json.access_token}&after=${activity_since}&page=${page_id}`    
                             fetch(activities_link)
                                 .then((res) => res.json())
                                 .then(function (json){
