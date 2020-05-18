@@ -53,7 +53,7 @@ const getActivites = async function (settings, pageNo = 1) {
                             L.polyline(
                                 coordinates,
                                 {
-                                    color: "#" + Math.floor(Math.random()*16777215).toString(16),
+                                    color: "#" + (Math.random().toString(16) + "000000").slice(2, 8),
                                     weight:5,
                                     opacity:.7,
                                     lineJoin:'round'
