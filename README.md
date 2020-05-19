@@ -71,4 +71,4 @@ sudo docker build -t docker-strava .
 Then you can use run-node-strava.sh to start a server in the background. It will run on port 8081 by default.
 
 ## Docker hub
-You can also use the [docker container available on Docker hub](https://hub.docker.com/repository/docker/piair/docker-strava-map), then you only need to create an .env file to run it.
+You can also use the [docker container available on Docker hub](https://hub.docker.com/r/piair/docker-strava-map), then you only need to create an .env file to run it.
