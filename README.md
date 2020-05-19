@@ -23,7 +23,23 @@ In .env you can set the activities you want to ignore (add the Strava activity I
 Changes to .env will only be read by node.js when the server restarts.
 
 You can set the 'activity_since' variable to indicate how far back the script needs to go. Paging has been implemented, so it is possible to go back more than the current 60 per page activities (Strava limits the number per page to 200).
+ 
+ ```javascript
+# password for internal stuff
+# change!
+app_key=6tuyfh456
 
+# stuff below this line you can leave, but you might want to change them
+# cache expire time in minutes
+expire=60
+# strava id of activities to ignore
+ignore_activity = [678, 345, 123]
+# what activity types to show
+show_activity_types = ["Walk"]
+# show activities since
+# epoch time conversion online: https://www.epochconverter.com/
+activity_since = 1546300800
+```
 ## Clear cache
 If you want to force the clearing of the cache, go to /cache/refresh/6tuyfh456
 
@@ -52,3 +68,6 @@ The run-node-strava.sh is meant to be used with a production version. First you 
 sudo docker build -t docker-strava .
 ```
 Then you can use run-node-strava.sh to start a server in the background. It will run on port 8081 by default.
+
+## Docker hub
+You can also use the [docker container available on Docker hub](https://hub.docker.com/repository/docker/piair/docker-strava-map), then you only need to create an .env file to run it.
