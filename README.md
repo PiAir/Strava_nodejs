@@ -33,12 +33,13 @@ app_key=6tuyfh456
 # cache expire time in minutes
 expire=60
 # strava id of activities to ignore
-ignore_activity = [678, 345, 123]
+# use ignore_activity=[] in case you don't want any to be ignored
+ignore_activity=[678, 345, 123]
 # what activity types to show
-show_activity_types = ["Walk"]
-# show activities since
+show_activity_types=["Walk"]
+# show activities si nce
 # epoch time conversion online: https://www.epochconverter.com/
-activity_since = 1546300800
+activity_since=1546300800
 ```
 ## Clear cache
 If you want to force the clearing of the cache, go to /cache/refresh/6tuyfh456
