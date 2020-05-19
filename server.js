@@ -6,34 +6,40 @@ var path=require('path');
 const flatCache = require('flat-cache')
 var Cache = require("./Cache.js");
 const expire = process.env.expire
-const force_refresh = process.env.force_refresh
+const app_key = process.env.app_key
 const cache = new Cache('StravaCache', path.resolve('./cache'), expire);
 const fetch = require('node-fetch');
 const activity_since = process.env.activity_since
 
 const PORT = process.env.PORT || 8080;
 
-app.get("/oauth/token", (nreq, nres) => {
+app.get("/oauth/token/:key", (nreq, nres) => {
     // we don't need to cache this API call 
     // it does not count against our limit
     // https://groups.google.com/d/msg/strava-api/yP8tV9KapZs/PH6lwK2b5gAJ
+    
+    if  (nreq.params.key == app_key) {
 
-    const baseUrl = nreq ? `${nreq.protocol}://${nreq.get('Host')}` : '';
-    const auth_link = "https://www.strava.com/oauth/token"
-    fetch(auth_link, {
-        method: 'post',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            client_id: process.env.client_id,
-            client_secret: process.env.client_secret,
-            refresh_token: process.env.refresh_token,
-            grant_type: 'refresh_token'
-        })
-    }).then(res => res.json())
-      .then(json => nres.json({access_token : json.access_token}))
+        const baseUrl = nreq ? `${nreq.protocol}://${nreq.get('Host')}` : '';
+        const auth_link = "https://www.strava.com/oauth/token"
+        fetch(auth_link, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                client_id: process.env.client_id,
+                client_secret: process.env.client_secret,
+                refresh_token: process.env.refresh_token,
+                grant_type: 'refresh_token'
+            })
+        }).then(res => res.json())
+        .then(json => nres.json({access_token : json.access_token}))
+    } else {
+        console.log('invalid key provided for oauth token request');
+        nres.status(500).json({error : 'invalid key provided for oauth token request'});
+    }        
 });
 
 app.get("/athlete/activities/:page", (nreq, nres) => {
@@ -47,7 +53,7 @@ app.get("/athlete/activities/:page", (nreq, nres) => {
             nres.json(cacheContent);
     } else {
         const baseUrl = nreq ? `${nreq.protocol}://${nreq.get('Host')}` : '';
-        access_token = fetch(baseUrl + "/oauth/token")
+        access_token = fetch(baseUrl + "/oauth/token/" + app_key)
                     .then(res => res.json())
                     .then(function (json){
                             // console.log(json);
@@ -77,7 +83,7 @@ app.get("/activities/:id", (nreq, nres) => {
             nres.json(cacheContent);
     } else {
         const baseUrl = nreq ? `${nreq.protocol}://${nreq.get('Host')}` : '';
-        access_token = fetch(baseUrl + "/oauth/token")
+        access_token = fetch(baseUrl + "/oauth/token/" + app_key)
                     .then(res => res.json())
                     .then(function (json){
                             // console.log(json);
@@ -112,7 +118,7 @@ app.get("/app/show_activity_types", (nreq, nres) => {
 
 app.get("/cache/refresh/:key", (nreq, nres) => {
 
-    if  (nreq.params.key == force_refresh) {
+    if  (nreq.params.key == app_key) {
         console.log('clearing cache');
         cache.remove();
         nres.status(200).json({status : 'cache cleared'});
