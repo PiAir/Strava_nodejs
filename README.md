@@ -72,5 +72,6 @@ Then you can use run-node-strava.sh to start a server in the background. It will
 
 ## Docker hub - Github
 The repository at [Github](https://github.com/PiAir/Strava_nodejs) is linked to the one at [Docker hub](https://hub.docker.com/r/piair/docker-strava-map), so you only need to create an [.env file like this example](https://github.com/PiAir/Strava_nodejs/blob/master/.env) to run it with:
-
+```
 sudo docker run -d --name docker-strava-map --env-file=.env -e "PORT=3000" -p 8084:3000 -u node piair/docker-strava-map:latest
+```
